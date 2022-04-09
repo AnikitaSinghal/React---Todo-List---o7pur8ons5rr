@@ -1,6 +1,7 @@
 import React from "react";
 function List(props) {
   return (
+    <>
     <div className="list">
       {props.ele}
       <button
@@ -18,6 +19,7 @@ function List(props) {
         edit
       </button>
     </div>
+    </>
   );
 }
 export default List;
