@@ -42,11 +42,11 @@ function App() {
         {" "}
         Add
       </button>
-      <div>
+      <>
         {list.map((ele, index) => (
           <List ele={ele} index={index} delete={delet} edits={edit} />
         ))}
-      </div>
+      </>
     </div>
   );
 }
