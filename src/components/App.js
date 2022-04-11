@@ -1,31 +1,54 @@
 import React, { useState } from "react";
 import "./../styles/App.css";
+import List from "./List";
 
-function App() 
-{
-	
-    const[list, setList] = useState([]);
-    const [input , setInput] = useState("");
-	const [edit,setEdit]=useState(false)
-	const [editinput,setEditInput]=useState("")
-	const [currenteditIndex,setCurrentEditIndex]=useState("")
-	let newArr=list;
-    return (
+function App() {
+  const [value, setValue] = useState("");
+  const [list, setList] = useState([]);
+  function delet(id) {
+    let newList = list.filter((value, index) => {
+      return index != id;
+    });
+    setList(newList);
+  }
+  function edit(id) {
+    list.map((ele, index) => {
+      if (id === index) {
+        setValue(ele);
+      }
+    });
+    delet(id);
+  }
+  return (
     <div id="main">
-        <textarea id="task" value={input} onChange={(event)=>{setInput(event.target.value)}} ></textarea>
-        <button onClick={()=>{if(input){setList([...list,input]),setInput("")}}} id="button">Add</button>
-		{edit?<><textarea value={editinput} onChange={(event)=>{setEditInput(event.target.value)}}></textarea>
-		<button onClick={()=>{if(editinput){newArr.splice(currenteditIndex,1),newArr.splice(currenteditIndex,0,editinput),setList([...newArr]),setEdit(false)}}}>Save</button></>:""}
-		
-		
-			{list.map((current,index)=>{return <> <li className="list">{current}</li>
-			<button onClick={()=>{newArr.splice(index,1)
-			setList([...newArr])}}>Delete</button>
-			<button onClick={()=>{setEdit(true),setEditInput(list[index]),setCurrentEditIndex(index)}}>Edit</button></>})}
-		
+      <textarea
+        id="task"
+        type="text"
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+      ></textarea>
+      <button
+        id="btn"
+        onClick={() => {
+          if (value === "") {
+          } else {
+            setList((list) => [...list, value]);
+            setValue("");
+          }
+        }}
+      >
+        {" "}
+        Add
+      </button>
+      <div>
+        {list.map((ele, index) => (
+          <List ele={ele} index={index} delete={delet} edits={edit} />
+        ))}
+      </div>
     </div>
-    );
+  );
 }
-
 
 export default App;
