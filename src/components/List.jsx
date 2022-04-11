@@ -5,14 +5,14 @@ function List(props) {
     <div className="list">
       {props.ele}
       <button
-        onClick={() => {
+        onClick={(props) => {
           props.delete(props.index);
         }}
       >
         delete
       </button>
       <button
-        onClick={() => {
+        onClick={(props) => {
           props.edits(props.index);
         }}
       >
