@@ -1,52 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import Task from "./Task.jsx";
 import "./../styles/App.css";
-import List from "./List";
 
 function App() {
-  const [value, setValue] = useState("");
-  const [list, setList] = useState([]);
-  function delet(id) {
-    let newList = list.filter((value, index) => {
-      return index != id;
-    });
-    setList(newList);
-  }
-  function edit(id) {
-    list.map((ele, index) => {
-      if (id === index) {
-        setValue(ele);
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState("");
+
+  let taskId ={current: new Date().getTime().toString() };
+
+  const addTask = () => {
+    const updatedTasks = [...tasks];
+    updatedTasks.push({ id: taskId.current, text: newTask });
+    setNewTask("");
+    setTasks(updatedTasks);
+  };
+
+  const handleDelete = (id) => {
+    const taskCopy = [...tasks];
+    const filteredTasks = taskCopy.filter((task) =>
+      task.id !== id ? task : null
+    );
+    setTasks(filteredTasks);
+  };
+
+  const saveChangedText = (id, newtext) => {
+    const taskCopy = [...tasks];
+    taskCopy.forEach((task) => {
+      if (task.id === id) {
+        task.text = newtext;
       }
     });
-    delet(id);
-  }
+    setTasks(taskCopy);
+  };
+
   return (
     <div id="main">
-      <textarea
+      <input
         id="task"
-        type="text"
-        value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
-      ></textarea>
-      <button
-        id="btn"
-        onClick={() => {
-          if (value === "") {
-          } else {
-            setList((list) => [...list, value]);
-            setValue("");
-          }
-        }}
-      >
-        {" "}
+        type="textarea"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+      ></input>
+      <button id="btn" onClick={addTask} disabled={!newTask}>
         Add
       </button>
-      <div>
-        {list.map((ele, index) => (
-          <List ele={ele} index={index} delete={delet} edits={edit} />
+      <ul>
+        {tasks.map((task) => (
+          <Task
+            key={task.id}
+            task={task}
+            saveChangedText={saveChangedText}
+            handleDelete={handleDelete}
+          />
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
